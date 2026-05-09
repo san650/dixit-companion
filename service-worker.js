@@ -7,7 +7,7 @@
    - Cache Google Fonts CSS + woff2 for offline typography.
    ===================================================================== */
 
-const VERSION = 'v3';
+const VERSION = 'v5';
 const CACHE   = `dixit-companion-${VERSION}`;
 
 const SHELL = [

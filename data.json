@@ -1,25 +1,65 @@
 {
-  "regions": [
-    "Uruguay",
-    "Argentina",
-    "Brasil",
-    "EEUU",
-    "Europa",
-    "América",
-    "General"
-  ],
+  "_note": "Each activity lists the explicit regions it can be paired with. 'General' is always available for every activity and is added at runtime, so it does not need to appear in any list here.",
   "activities": [
-    "Arte",
-    "Cine",
-    "Comida",
-    "Fútbol",
-    "Historia",
-    "Literatura",
-    "Mitos",
-    "Música",
-    "Personaje actual",
-    "Personaje histórico",
-    "Política",
-    "Suceso histórico"
+    {
+      "name": "Arte",
+      "regions": ["Argentina", "Uruguay", "Brasil", "EEUU", "Europa", "América", "Río de la Plata"]
+    },
+    {
+      "name": "Cine",
+      "regions": ["Argentina", "Uruguay", "EEUU", "Europa", "América", "Río de la Plata"]
+    },
+    {
+      "name": "Comida",
+      "regions": ["Europa", "América", "Asia"]
+    },
+    {
+      "name": "Fútbol",
+      "regions": ["Argentina", "Uruguay", "Brasil", "Europa", "América", "Inglaterra", "Río de la Plata"]
+    },
+    {
+      "name": "Historia",
+      "regions": ["Argentina", "Uruguay", "EEUU", "Europa", "América"]
+    },
+    {
+      "name": "Literatura",
+      "regions": []
+    },
+    {
+      "name": "Mitos",
+      "regions": []
+    },
+    {
+      "name": "Música",
+      "regions": ["Argentina", "Uruguay", "Brasil", "EEUU", "Europa", "América", "Inglaterra", "Río de la Plata"]
+    },
+    {
+      "name": "Personaje actual",
+      "regions": ["Argentina", "Uruguay", "EEUU", "Europa", "América", "Río de la Plata"]
+    },
+    {
+      "name": "Personaje ficticio",
+      "regions": ["Argentina", "Uruguay", "América", "Río de la Plata"]
+    },
+    {
+      "name": "Personaje histórico",
+      "regions": ["Argentina", "Uruguay", "EEUU", "Europa", "América", "Río de la Plata", "Asia"]
+    },
+    {
+      "name": "Política",
+      "regions": ["Argentina", "Uruguay", "EEUU", "América", "Río de la Plata"]
+    },
+    {
+      "name": "Refranes",
+      "regions": ["Argentina", "Uruguay", "Río de la Plata", "Europa", "América"]
+    },
+    {
+      "name": "Suceso histórico",
+      "regions": ["Argentina", "Uruguay", "EEUU", "Europa", "América", "Río de la Plata"]
+    },
+    {
+      "name": "Televisión",
+      "regions": ["Argentina", "Uruguay", "EEUU", "Río de la Plata"]
+    }
   ]
 }

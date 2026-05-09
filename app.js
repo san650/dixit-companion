@@ -15,11 +15,9 @@ const els = {
   counter:      $('#counter'),
   genLabel:     $('#genLabel'),
   genTag:       $('#genTag'),
-  poolStat:     $('#poolStat'),
   dateStamp:    $('#dateStamp'),
   netDot:       $('#netDot'),
   netLabel:     $('#netLabel'),
-  offlineStat:  $('#offlineStat'),
   btn:          $('#generateBtn'),
   restartBtn:   $('#restartBtn'),
   logBtn:       $('#logBtn'),
@@ -273,8 +271,37 @@ function todayStamp() {
 
 function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
+/* "del mundo" is always available for every activity, with a small bias
+   so it lands ~10% more often than any other region in the pool. */
+const GENERAL_REGION = 'del mundo';
+const GENERAL_WEIGHT = 1.1;
+const REGULAR_WEIGHT = 1.0;
+
+function regionsFor(activity) {
+  return Array.from(new Set([...activity.regions, GENERAL_REGION]));
+}
+
+/* Weighted random pick: regions get weight 1.0, "del mundo" gets 1.1. */
+function pickRegion(regions) {
+  const weights = regions.map((r) => (r === GENERAL_REGION ? GENERAL_WEIGHT : REGULAR_WEIGHT));
+  const total = weights.reduce((s, w) => s + w, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < regions.length; i++) {
+    r -= weights[i];
+    if (r < 0) return regions[i];
+  }
+  return regions[regions.length - 1];
+}
+
+function totalCombinations() {
+  return state.data.activities.reduce(
+    (sum, a) => sum + regionsFor(a).length,
+    0,
+  );
+}
+
 function pickPair() {
-  const { activities, regions } = state.data;
+  const { activities } = state.data;
 
   const recent = new Set();
   if (state.current) recent.add(pairKey(state.current.activity, state.current.region));
@@ -282,15 +309,18 @@ function pickPair() {
     recent.add(pairKey(h.activity, h.region))
   );
 
-  const total = activities.length * regions.length;
-  const cap = recent.size >= total ? 0 : recent.size;
+  const cap = recent.size >= totalCombinations() ? 0 : recent.size;
 
   for (let i = 0; i < 200; i++) {
-    const a = rand(activities);
-    const r = rand(regions);
-    if (cap === 0 || !recent.has(pairKey(a, r))) return { activity: a, region: r };
+    const activity = rand(activities);
+    const region = pickRegion(regionsFor(activity));
+    if (cap === 0 || !recent.has(pairKey(activity.name, region))) {
+      return { activity: activity.name, region };
+    }
   }
-  return { activity: rand(activities), region: rand(regions) };
+  const activity = rand(activities);
+  const region = pickRegion(regionsFor(activity));
+  return { activity: activity.name, region };
 }
 
 function setLabelKey(left, right) {
@@ -303,10 +333,13 @@ function setLabelKey(left, right) {
   );
 }
 
-function regionDisplay(region) {
-  return region === 'General' ? 'en general' : region;
+function regionIsGeneral(region) {
+  // Accept legacy 'General' from previously persisted sessions.
+  return region === GENERAL_REGION || region === 'General';
 }
-function regionIsGeneral(region) { return region === 'General'; }
+function regionDisplay(region) {
+  return regionIsGeneral(region) ? GENERAL_REGION : `de ${region}`;
+}
 
 function buildPhraseSpans(entry) {
   const a = document.createElement('span');
@@ -486,7 +519,7 @@ function askRestart() {
     els.confirmModal.showModal();
   } else {
     // Fallback for browsers without <dialog>
-    if (window.confirm('¿Reiniciar la partida? Se perderán las categorías generadas.')) {
+    if (window.confirm('¿Terminar la partida? Se perderán las categorías generadas.')) {
       clearGame();
     }
   }
@@ -512,7 +545,6 @@ function paintNetStatus() {
   const online = navigator.onLine;
   els.netDot.classList.toggle('offline', !online);
   els.netLabel.textContent = online ? 'en línea' : 'sin conexión';
-  els.offlineStat.textContent = online ? 'en caché' : 'modo offline';
 }
 
 /* ---------- Boot ----------------------------------------------------- */
@@ -548,12 +580,11 @@ async function boot() {
   try {
     state.data = await loadData();
     const a = state.data.activities?.length || 0;
-    const r = state.data.regions?.length || 0;
-    els.poolStat.textContent = `${a} actividades · ${r} regiones`;
+    const allRegions = new Set([GENERAL_REGION]);
+    state.data.activities?.forEach((act) => act.regions?.forEach((r) => allRegions.add(r)));
   } catch (err) {
     els.activity.textContent = 'sin datos';
     els.region.textContent   = 'aún no disponibles';
-    els.poolStat.textContent = '— · —';
     console.error('Failed to load data.json', err);
     return;
   }

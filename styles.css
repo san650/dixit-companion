@@ -364,20 +364,19 @@ hr.rule-cream {
 .history-stack {
   list-style: none;
   margin: 0;
-  padding: 18px 0 0;
-  position: relative;
+  padding: 12px 0 0;
   min-height: 0;
   perspective: 1300px;
   perspective-origin: 50% 0%;
   transform-style: preserve-3d;
   pointer-events: none;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .history-item {
-  position: absolute;
-  left: 0;
-  right: 0;
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: 48px 1fr;
   gap: 16px;
@@ -389,41 +388,36 @@ hr.rule-cream {
   line-height: 1.05;
   letter-spacing: -0.015em;
   color: var(--cream);
+  overflow-wrap: break-word;
   transform-origin: 50% 0%;
   transition:
     transform 540ms var(--ease-out),
     opacity   540ms var(--ease-out),
-    top       540ms var(--ease-out),
     filter    540ms var(--ease-out);
-  will-change: transform, opacity, top;
+  will-change: transform, opacity;
 }
 
-/* Per-depth placement: each next item recedes on the Z-axis and sits
-   just below the previous one — tight stack, still readable. */
+/* Per-depth recede: each item flows naturally below the previous one
+   (so wrapping/different heights don't overlap) and steps back on Z. */
 .history-item[data-depth="0"] {
-  top: 0;
   transform: translateZ(0);
   opacity: 0.75;
 }
 .history-item[data-depth="1"] {
-  top: 50px;
   transform: translateZ(-110px);
   opacity: 0.50;
 }
 .history-item[data-depth="2"] {
-  top: 94px;
   transform: translateZ(-220px);
   opacity: 0.32;
   filter: blur(0.4px);
 }
 .history-item[data-depth="3"] {
-  top: 132px;
   transform: translateZ(-330px);
   opacity: 0.18;
   filter: blur(0.7px);
 }
 .history-item[data-depth="4"] {
-  top: 164px;
   transform: translateZ(-440px);
   opacity: 0.10;
   filter: blur(1px);
@@ -614,21 +608,6 @@ hr.rule-cream {
   margin-left: 4px;
   border-radius: 1px;
 }
-
-/* ---------- Colophon ------------------------------------------------- */
-
-.colophon {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--serif-2);
-  font-style: italic;
-  font-size: 13px;
-  color: var(--ink-soft);
-  letter-spacing: 0.02em;
-}
-.colophon .colo-mid { color: var(--gold); }
 
 /* =====================================================================
    Session log dialog (native <dialog>) — the cream "page"
