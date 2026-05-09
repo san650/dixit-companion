@@ -58,8 +58,24 @@
       "regions": ["Argentina", "Uruguay", "EEUU", "Europa", "América", "Río de la Plata"]
     },
     {
-      "name": "Televisión",
+      "name": "Televisión o streaming",
       "regions": ["Argentina", "Uruguay", "EEUU", "Río de la Plata"]
+    },
+    {
+      "name": "Dibujos animados",
+      "regions": []
+    },
+    {
+      "name": "Objetos del hogar",
+      "regions": []
+    },
+    {
+      "name": "Geografía",
+      "regions": []
+    },
+    {
+      "name": "Astronomía",
+      "regions": []
     }
   ]
 }
