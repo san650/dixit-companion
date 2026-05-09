@@ -1,0 +1,25 @@
+{
+  "regions": [
+    "Uruguay",
+    "Argentina",
+    "Brasil",
+    "EEUU",
+    "Europa",
+    "América",
+    "General"
+  ],
+  "activities": [
+    "Arte",
+    "Cine",
+    "Comida",
+    "Fútbol",
+    "Historia",
+    "Literatura",
+    "Mitos",
+    "Música",
+    "Personaje actual",
+    "Personaje histórico",
+    "Política",
+    "Suceso histórico"
+  ]
+}

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dixit Companion</title>
+  <meta name="description" content="A small companion for Dixit storytellers — pairs an activity with a region to narrow your clue." />
+  <meta name="theme-color" content="#0F1B33" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Dixit Companion" />
+
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,200..900,30..100,0..1;1,9..144,200..900,30..100,0..1&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" />
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+  <!-- Atmospheric night layers -->
+  <div class="night" aria-hidden="true">
+    <div class="night-glow"></div>
+    <div class="night-stars night-stars-a"></div>
+    <div class="night-stars night-stars-b"></div>
+    <div class="night-grain"></div>
+  </div>
+
+  <main class="sheet" id="sheet" data-session="idle">
+
+    <header class="masthead">
+      <a class="brand" href="./" aria-label="Dixit Companion">
+        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <!-- Ornate D -->
+          <path d="M14 12 L14 52 L34 52 C 49 52 56 42 56 32 C 56 22 49 12 34 12 Z"
+                fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="miter"/>
+          <!-- Tiny five-point star ornament beside the D -->
+          <path d="M50 8 L52.2 13.4 L58 14 L53.6 18 L54.8 24 L50 21.2 L45.2 24 L46.4 18 L42 14 L47.8 13.4 Z"
+                fill="currentColor" opacity="0.95"/>
+        </svg>
+        <span class="brand-word">
+          <em>Dixit</em>
+          <i class="brand-orn" aria-hidden="true">✦</i>
+          <em>Companion</em>
+        </span>
+      </a>
+
+      <div class="masthead-meta">
+        <span class="meta-pair"><em>N°</em><span id="counter">000</span></span>
+      </div>
+    </header>
+
+    <hr class="rule rule-orn" />
+
+    <section class="spec">
+      <span class="spec-left"><em>una categoría</em> · ES</span>
+      <span class="spec-mid" id="dateStamp">·</span>
+      <span class="status">
+        <i class="dot" id="netDot"></i>
+        <span id="netLabel">Listo</span>
+      </span>
+    </section>
+
+    <hr class="rule rule-orn" />
+
+    <!-- Stage: current category + receding history stack -->
+    <section class="stage" aria-live="polite">
+
+      <div class="stage-top">
+        <div class="labels">
+          <span class="label-key" id="labelKey">Sesión · en pausa</span>
+        </div>
+
+        <output class="phrase" id="phrase" for="generateBtn">
+          <span class="phrase-line phrase-activity" id="activity">Aguarda</span>
+          <span class="phrase-line phrase-region" id="region">pulsa empezar</span>
+        </output>
+
+        <div class="accent" id="accent" aria-hidden="true"></div>
+      </div>
+
+      <ol class="history-stack" id="historyStack" aria-label="Categorías anteriores"></ol>
+    </section>
+
+    <!-- Action area -->
+    <div class="dock">
+      <hr class="rule rule-orn" />
+
+      <div class="actions">
+        <button class="generate" id="generateBtn" type="button">
+          <span class="gen-arrow" aria-hidden="true">
+            <!-- ornamental crescent + arrow -->
+            <svg viewBox="0 0 24 24"><path d="M5 19 19 5 M9 5h10v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="gen-label" id="genLabel">Empezar partida</span>
+          <span class="gen-tag" id="genTag">№ 000</span>
+        </button>
+
+        <menu class="sub-actions" aria-label="Controles">
+          <li>
+            <button class="ghost-btn" id="restartBtn" type="button" hidden>
+              <span class="g-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8 M4 4v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </span>
+              <span><em>Reiniciar partida</em></span>
+            </button>
+          </li>
+          <li>
+            <button class="ghost-btn" id="logBtn" type="button" hidden>
+              <span class="g-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 6h14 M5 12h14 M5 18h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </span>
+              <span><em>Bitácora</em></span>
+              <span class="g-count" id="logCount">0</span>
+            </button>
+          </li>
+        </menu>
+      </div>
+
+      <hr class="rule rule-orn" />
+
+      <footer class="colophon">
+        <span class="colo-item" id="poolStat">— · —</span>
+        <span class="colo-item colo-mid"><em>Dixit Companion</em></span>
+        <span class="colo-item" id="offlineStat">en caché</span>
+      </footer>
+    </div>
+
+  </main>
+
+  <!-- Restart confirmation -->
+  <dialog class="modal modal-confirm" id="confirmModal" aria-labelledby="confirmTitle">
+    <article class="modal-card">
+      <div class="modal-corners" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <header class="modal-head modal-head-compact">
+        <hgroup>
+          <p class="modal-eyebrow"><i>✦</i> confirmar <i>✦</i></p>
+          <h2 class="modal-title" id="confirmTitle">¿Reiniciar la partida?</h2>
+        </hgroup>
+      </header>
+      <p class="confirm-body">
+        <em>Se perderán todas las categorías generadas en esta sesión.</em>
+      </p>
+      <form method="dialog" class="confirm-actions">
+        <button type="submit" value="cancel" class="ghost-btn confirm-cancel" autofocus>
+          <em>Cancelar</em>
+        </button>
+        <button type="submit" value="confirm" class="confirm-go">
+          <span class="g-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8 M4 4v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <em>Reiniciar</em>
+        </button>
+      </form>
+    </article>
+  </dialog>
+
+  <!-- Session log -->
+  <dialog class="modal" id="logModal" aria-labelledby="logTitle">
+    <article class="modal-card">
+      <div class="modal-corners" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <header class="modal-head">
+        <hgroup>
+          <p class="modal-eyebrow"><i>✦</i> bitácora de la partida <i>✦</i></p>
+          <h2 class="modal-title" id="logTitle">Todas las categorías</h2>
+        </hgroup>
+        <p class="modal-meta">
+          <span id="modalCount">00</span>
+          <span class="modal-meta-sub"><em>entradas</em></span>
+        </p>
+        <form method="dialog" class="modal-close-form">
+          <button class="modal-close" id="modalCloseBtn" type="submit" aria-label="Cerrar bitácora" value="close">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18 M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </form>
+      </header>
+
+      <hr class="rule rule-orn rule-cream" />
+
+      <ol class="modal-list" id="modalList"></ol>
+
+      <footer class="modal-foot">
+        <span><em>de la más reciente a la más antigua</em></span>
+      </footer>
+    </article>
+  </dialog>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
