@@ -539,6 +539,31 @@ function closeLog() {
   else els.logModal.removeAttribute('open');
 }
 
+/* ---------- Splash overlay -----------------------------------------
+   Shown until boot() resolves. Honors a minimum display time so the
+   curtain doesn't flash on a warm cache, and a hard fallback so a
+   stalled boot can never strand the user behind it. */
+
+const splashEl   = document.getElementById('splash');
+const splashStart = performance.now();
+const SPLASH_MIN_MS = 700;
+
+function hideSplash() {
+  if (!splashEl || splashEl.dataset.gone === '1') return;
+  splashEl.dataset.gone = '1';
+  const wait = Math.max(0, SPLASH_MIN_MS - (performance.now() - splashStart));
+  setTimeout(() => {
+    splashEl.classList.add('is-leaving');
+    const finish = () => splashEl.remove();
+    splashEl.addEventListener('transitionend', finish, { once: true });
+    // belt-and-braces: in case transitionend never fires
+    setTimeout(finish, 900);
+  }, wait);
+}
+
+// Hard fallback: never let the splash linger past ~6s, regardless of boot state.
+setTimeout(hideSplash, 6000);
+
 /* ---------- Network/offline status ---------------------------------- */
 
 function paintNetStatus() {
@@ -586,6 +611,7 @@ async function boot() {
     els.activity.textContent = 'sin datos';
     els.region.textContent   = 'aún no disponibles';
     console.error('Failed to load data.json', err);
+    hideSplash();
     return;
   }
 
@@ -614,6 +640,8 @@ async function boot() {
       generate();
     }
   });
+
+  hideSplash();
 }
 
 /* ---------- Service worker registration ----------------------------- */

@@ -14,6 +14,42 @@
   <link rel="icon" type="image/svg+xml" href="./icon.svg" />
   <link rel="apple-touch-icon" href="./icon.svg" />
 
+  <!-- Apple PWA startup images — shown by iOS before HTML parses on installed
+       PWAs. Apple requires PNG (SVG is ignored). Generate the set once with:
+         npx pwa-asset-generator ./icon.svg ./splash \
+           --type png --splash-only --portrait-only --opaque true \
+           --background "#0F1B33" --padding "30%" -q 95
+       The in-app HTML splash below covers every other platform and the
+       moment after iOS hands the screen to the page. -->
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1290-2796.png"
+        media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1179-2556.png"
+        media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1284-2778.png"
+        media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1170-2532.png"
+        media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1125-2436.png"
+        media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1242-2688.png"
+        media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-828-1792.png"
+        media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1242-2208.png"
+        media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-750-1334.png"
+        media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-2048-2732.png"
+        media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1668-2388.png"
+        media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1640-2360.png"
+        media="(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1536-2048.png"
+        media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="./splash/apple-splash-1668-2224.png"
+        media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,200..900,30..100,0..1;1,9..144,200..900,30..100,0..1&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" />
@@ -21,6 +57,34 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
+
+  <!-- PWA splash overlay: shown until the app shell + data.json are ready. -->
+  <div class="splash" id="splash" role="status" aria-label="Cargando Dixit Companion">
+    <div class="splash-content">
+      <svg class="splash-mark" viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <radialGradient id="splashHalo" cx="50%" cy="50%" r="55%">
+            <stop offset="0%"   stop-color="rgba(212,175,111,0.32)"/>
+            <stop offset="55%"  stop-color="rgba(212,175,111,0.08)"/>
+            <stop offset="100%" stop-color="rgba(212,175,111,0)"/>
+          </radialGradient>
+        </defs>
+        <circle class="splash-halo" cx="100" cy="100" r="92" fill="url(#splashHalo)"/>
+        <path class="splash-mark-d"
+              d="M42 36 L42 156 L102 156 C 147 156 168 126 168 96 C 168 66 147 36 102 36 Z"
+              fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="miter"/>
+        <path class="splash-mark-star"
+              d="M162 22 L165.5 33.4 L177.4 34 L168.2 41 L171.2 52.6 L162 46.2 L152.8 52.6 L155.8 41 L146.6 34 L158.5 33.4 Z"
+              fill="currentColor"/>
+      </svg>
+      <span class="splash-word">
+        <em>Dixit</em>
+        <i aria-hidden="true">✦</i>
+        <em>Companion</em>
+      </span>
+      <span class="splash-rule" aria-hidden="true"></span>
+    </div>
+  </div>
 
   <!-- Atmospheric night layers -->
   <div class="night" aria-hidden="true">
